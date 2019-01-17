@@ -1,1 +1,1 @@
-export { default } from "./AlertList"
+export { default } from "./AlertListContainer"
