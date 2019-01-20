@@ -1,0 +1,6 @@
+{
+  "/*": "/$1",
+  "/alerts/": "/alerts",
+  "/alert/details?id=:id": "/alertDetails?id=:id",
+  "/alert/getAlertNotes?alertId=:alertId": "/notes?alertId=:alertId"
+}
