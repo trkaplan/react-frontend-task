@@ -1,19 +1,20 @@
 import React, { Component, Fragment } from "react"
-import { connect } from "react-redux"
-import PropTypes from "prop-types"
+import callApi from "../../utils/apiCaller"
 import AlertList from "./AlertList"
-import { alertType, dateTimeRangeType } from "../../propTypes"
-import { getAlerts } from "../../actions"
+import { API_URL_ALERTS } from "../../constants"
 
 class AlertListContainer extends Component {
+  state = { alerts: null, isLoading: true }
+
   componentDidMount() {
-    const { fetchData } = this.props
-    fetchData()
+    callApi(API_URL_ALERTS).then(response => {
+      this.setState({ alerts: response.alerts, isLoading: false })
+    })
   }
 
   render() {
-    const { apiData } = this.props
-    const { alerts, isLoading } = apiData
+    const { alerts, isLoading } = this.state
+
     return (
       <Fragment>
         {isLoading && <span>Loading...</span>}
@@ -23,30 +24,4 @@ class AlertListContainer extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  apiData: state.alerts,
-  isLoading: state.isLoading
-})
-
-const mapDispatchToProps = dispatch => ({
-  fetchData: () => {
-    dispatch(getAlerts())
-  }
-})
-AlertListContainer.defaultProps = {
-  apiData: null
-}
-
-AlertListContainer.propTypes = {
-  fetchData: PropTypes.func.isRequired,
-  apiData: PropTypes.shape({
-    alerts: PropTypes.arrayOf(alertType),
-    dateTimeRange: dateTimeRangeType,
-    isLoading: PropTypes.bool
-  })
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AlertListContainer)
+export default AlertListContainer

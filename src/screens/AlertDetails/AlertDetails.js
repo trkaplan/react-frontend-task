@@ -1,19 +1,36 @@
 import React, { Component, Fragment } from "react"
 import PropTypes from "prop-types"
-import { connect } from "react-redux"
-import { alertType } from "../../propTypes"
-import { getAlertDetails } from "../../actions"
+import callApi from "../../utils/apiCaller"
+import { API_URL_ALERT_DETAILS, API_URL_ALERT_NOTES } from "../../constants"
 
 class AlertDetails extends Component {
+  state = {
+    details: {},
+    notes: {},
+    isLoading: true
+  }
+
   componentDidMount() {
-    const { alertId } = this.props
-    const { fetchData } = this.props
-    fetchData(alertId)
+    const { match } = this.props
+    const { id } = match.params
+
+    const options = { method: "GET" }
+    const promises = [
+      // TODO Convert querystrings to an object. Since fetch does not support
+      // (https://github.com/github/fetch/issues/256) this, using Axios would be better.
+      callApi(`${API_URL_ALERT_DETAILS}?id=${id}`, options),
+      callApi(`${API_URL_ALERT_NOTES}?alertId=${id}`, options)
+    ]
+    Promise.all(promises).then(([details, notes]) => {
+      // TODO handle empty service response
+      const detailsObject = details[0]
+      this.setState({ details: detailsObject, notes, isLoading: false })
+    })
   }
 
   render() {
-    const { apiData } = this.props
-    const { details, notes, isLoading } = apiData
+    const { details, notes, isLoading } = this.state
+
     return (
       <Fragment>
         {isLoading && <span>Loading...</span>}
@@ -29,36 +46,11 @@ class AlertDetails extends Component {
     )
   }
 }
-
-AlertDetails.defaultProps = {
-  apiData: null
-}
 AlertDetails.propTypes = {
-  fetchData: PropTypes.func.isRequired,
-  alertId: PropTypes.string.isRequired,
-  apiData: PropTypes.shape({
-    details: alertType,
-    isLoading: PropTypes.bool
-  })
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    })
+  }).isRequired
 }
-
-const mapStateToProps = (state, { match }) => {
-  const { id: alertId } = match.params
-
-  return {
-    apiData: state.alertsDetails,
-    isLoading: state.isLoading,
-    alertId
-  }
-}
-
-const mapDispatchToProps = dispatch => ({
-  fetchData: id => {
-    dispatch(getAlertDetails(id))
-  }
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AlertDetails)
+export default AlertDetails
