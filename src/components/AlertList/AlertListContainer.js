@@ -1,18 +1,10 @@
 import React, { Component, Fragment } from "react"
-import styled from "styled-components"
 import callApi from "../../utils/apiCaller"
 import AlertList from "./AlertList"
 import AlertListFilter from "../AlertListFilter"
 import { API_URL_ALERTS } from "../../constants"
+import { PageWrapper, Column } from "./styled"
 
-const Wrapper = styled.div`
-  display: flex;
-  height: 100%;
-`
-const Column = styled.div`
-  flex: ${props => `0 0 ${props.width};`};
-  max-width: ${props => `${props.width};`};
-`
 class AlertListContainer extends Component {
   state = {
     alerts: null,
@@ -41,7 +33,7 @@ class AlertListContainer extends Component {
       <Fragment>
         {isLoading && <span>Loading...</span>}
         {alerts && (
-          <Wrapper>
+          <PageWrapper>
             <Column width="300px">
               <AlertListFilter
                 selectedFilter={selectedFilter}
@@ -51,7 +43,7 @@ class AlertListContainer extends Component {
             <Column width="auto">
               <AlertList alerts={alerts} selectedFilter={selectedFilter} />
             </Column>
-          </Wrapper>
+          </PageWrapper>
         )}
       </Fragment>
     )

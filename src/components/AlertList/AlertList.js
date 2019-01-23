@@ -1,13 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from "react"
 import { withRouter } from "react-router"
-import styled from "styled-components"
 import queryExtractor from "./alert-query-helper"
 import Table from "../UIKit/Table"
-// TODO: move styled-somponents to external file.
-const Wrapper = styled.div`
-  padding: 24px;
-`
+import { ListWrapper } from "./styled"
 
 const AlertList = ({ alerts, selectedFilter, history }) => {
   const { query } = selectedFilter
@@ -37,10 +33,10 @@ const AlertList = ({ alerts, selectedFilter, history }) => {
   }
   const { body } = tableData
   return (
-    <Wrapper>
+    <ListWrapper>
       <h2>Alert List</h2>
       <Table body={body} />
-    </Wrapper>
+    </ListWrapper>
   )
 }
 
