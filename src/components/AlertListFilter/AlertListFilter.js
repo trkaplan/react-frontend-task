@@ -1,8 +1,8 @@
 import React from "react"
 import PropTypes from "prop-types"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import filterTypes from "./alert-list-filters"
-
+// TODO: move styled-somponents to external file.
 const Wrapper = styled.div`
   background-color: #f4f5f7;
   height: 100%;
@@ -13,20 +13,21 @@ const FilterTitle = styled.h3`
   margin-bottom: 6px;
   line-height: 1.4rem;
 `
-const styleFilterItemActive = css`
-  color: white;
-  background-color: #505f79;
-`
-const FilterItem = styled.div`
+const FilterItem = styled.div.attrs(props => ({
+  className: props.isSelected ? "selected" : ""
+}))`
   display: block;
   padding: 4px;
   border-radius: 2px;
   margin: 2px 0;
-  ${props => (props.checked ? styleFilterItemActive : "")};
   cursor: pointer;
-
-  &:hover {
+  &.selected {
+    color: white;
+    background-color: #505f79;
+  }
+  &:hover:not(.selected) {
     background-color: #ebecf0;
+    color: black;
   }
 `
 const AlertListFilter = ({ onFilterUpdate, selectedFilter }) => (
@@ -36,7 +37,7 @@ const AlertListFilter = ({ onFilterUpdate, selectedFilter }) => (
       <FilterItem
         type="button"
         role="menuitem"
-        checked={selectedFilter.id === item.id}
+        isSelected={selectedFilter.id === item.id}
         key={item.id}
         onClick={() => onFilterUpdate(item)}
         onKeyDown={() => onFilterUpdate(item)}

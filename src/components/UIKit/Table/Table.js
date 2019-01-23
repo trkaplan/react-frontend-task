@@ -1,0 +1,50 @@
+/* eslint-disable react/no-array-index-key */
+import React from "react"
+import PropTypes from "prop-types"
+import { Tr, Td } from "./styled"
+
+const Table = ({ head, body }) => (
+  <table>
+    {head && (
+      <thead>
+        <tr>
+          {head.cells.map(({ key, content }) => (
+            <th key={key}>{content}</th>
+          ))}
+        </tr>
+      </thead>
+    )}
+    <tbody>
+      {body.rows.map(({ key, cells, onClickHandler }) => (
+        <Tr key={key} onClick={onClickHandler}>
+          {cells.map((cell, index) => (
+            <Td key={index}>{cell.content}</Td>
+          ))}
+        </Tr>
+      ))}
+    </tbody>
+  </table>
+)
+Table.defaultProps = {
+  head: null
+}
+Table.propTypes = {
+  head: PropTypes.shape({
+    cells: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string,
+        content: PropTypes.string
+      })
+    )
+  }),
+  body: PropTypes.shape({
+    rows: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string,
+        content: PropTypes.string,
+        onClickHandler: PropTypes.func
+      })
+    )
+  }).isRequired
+}
+export default Table
