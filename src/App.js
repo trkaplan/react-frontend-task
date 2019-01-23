@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-expressions */
 import React from "react"
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom"
 import styled, { createGlobalStyle } from "styled-components"
-import reset from "styled-reset-advanced"
+import { reset } from "./utils/styled-reset-advanced-custom"
 import HomePage from "./screens/HomePage"
 import AlertDetails from "./screens/AlertDetails"
 import Header from "./components/Header"
