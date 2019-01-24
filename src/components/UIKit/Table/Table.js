@@ -33,7 +33,7 @@ Table.propTypes = {
     cells: PropTypes.arrayOf(
       PropTypes.shape({
         key: PropTypes.string,
-        content: PropTypes.string
+        content: PropTypes.node
       })
     )
   }),
@@ -41,7 +41,7 @@ Table.propTypes = {
     rows: PropTypes.arrayOf(
       PropTypes.shape({
         key: PropTypes.string,
-        content: PropTypes.string,
+        content: PropTypes.node,
         onClickHandler: PropTypes.func
       })
     )
