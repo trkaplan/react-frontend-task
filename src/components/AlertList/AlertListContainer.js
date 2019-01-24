@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react"
 import callApi from "../../utils/apiCaller"
 import AlertList from "./AlertList"
 import AlertListFilter from "../AlertListFilter"
+import Chart from "../UIKit/Chart"
 import { API_URL_ALERTS } from "../../constants"
 import { PageWrapper, Column } from "./styled"
 
@@ -13,7 +14,8 @@ class AlertListContainer extends Component {
       id: "pre-1",
       title: "All",
       query: ""
-    }
+    },
+    graphVisible: false
   }
 
   componentDidMount() {
@@ -26,8 +28,20 @@ class AlertListContainer extends Component {
     this.setState({ selectedFilter })
   }
 
+  toggleGraph = () => {
+    this.setState(prevState => ({
+      graphVisible: !prevState.graphVisible
+    }))
+  }
+
+  getChartTooltipContent = data => {
+    const { date, tinyId } = data
+    const content = `Id: ${tinyId}, Date: ${date}`
+    return <Fragment>{content}</Fragment>
+  }
+
   render() {
-    const { alerts, isLoading, selectedFilter } = this.state
+    const { alerts, isLoading, selectedFilter, graphVisible } = this.state
 
     return (
       <Fragment>
@@ -40,8 +54,19 @@ class AlertListContainer extends Component {
                 onFilterUpdate={this.onFilterUpdate}
               />
             </Column>
-            <Column width="auto">
-              <AlertList alerts={alerts} selectedFilter={selectedFilter} />
+            <Column width="auto" padding="24px">
+              {graphVisible && (
+                <Chart
+                  data={alerts}
+                  tooltipContent={this.getChartTooltipContent}
+                />
+              )}
+              <AlertList
+                alerts={alerts}
+                selectedFilter={selectedFilter}
+                toggleGraph={this.toggleGraph}
+                graphVisible={graphVisible}
+              />
             </Column>
           </PageWrapper>
         )}

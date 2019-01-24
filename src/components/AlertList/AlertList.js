@@ -1,11 +1,17 @@
 /* eslint-disable react/prop-types */
-import React from "react"
+import React, { Fragment } from "react"
 import { withRouter } from "react-router"
 import queryExtractor from "./alert-query-helper"
-import Table from "../UIKit/Table"
-import { ListWrapper } from "./styled"
+import { Table } from "../UIKit"
+import { ToggleGraphButton } from "./styled"
 
-const AlertList = ({ alerts, selectedFilter, history }) => {
+const AlertList = ({
+  alerts,
+  selectedFilter,
+  history,
+  toggleGraph,
+  graphVisible
+}) => {
   const { query } = selectedFilter
   const { key: filterKey, value: filterValue } = query
     ? queryExtractor(query)
@@ -33,10 +39,13 @@ const AlertList = ({ alerts, selectedFilter, history }) => {
   }
   const { body } = tableData
   return (
-    <ListWrapper>
+    <Fragment>
       <h2>Alert List</h2>
+      <ToggleGraphButton onClick={toggleGraph}>
+        {graphVisible ? "Hide Graph" : "Show Graph"}
+      </ToggleGraphButton>
       <Table body={body} />
-    </ListWrapper>
+    </Fragment>
   )
 }
 
