@@ -4,7 +4,7 @@ import AlertList from "./AlertList"
 import AlertListFilter from "../AlertListFilter"
 import Chart from "../UIKit/Chart"
 import { API_URL_ALERTS } from "../../constants"
-import { PageWrapper, Column } from "./styled"
+import { PageWrapper, Column, ToggleGraphButton } from "./styled"
 
 class AlertListContainer extends Component {
   state = {
@@ -34,15 +34,20 @@ class AlertListContainer extends Component {
     }))
   }
 
+  getChartData = alerts =>
+    alerts.map(alert => ({
+      valueX: new Date(alert.createdAtTimestamp),
+      valueY: alert.count
+    }))
+
   getChartTooltipContent = data => {
-    const { date, tinyId } = data
-    const content = `Id: ${tinyId}, Date: ${date}`
+    const { valueX: date, valueY: count } = data
+    const content = `Count: ${count}, Date: ${date}`
     return <Fragment>{content}</Fragment>
   }
 
   render() {
     const { alerts, isLoading, selectedFilter, graphVisible } = this.state
-
     return (
       <Fragment>
         {isLoading && <span>Loading...</span>}
@@ -55,18 +60,18 @@ class AlertListContainer extends Component {
               />
             </Column>
             <Column width="auto" padding="24px">
+              <ToggleGraphButton onClick={this.toggleGraph}>
+                {graphVisible ? "Hide Graph" : "Show Graph"}
+              </ToggleGraphButton>
               {graphVisible && (
                 <Chart
-                  data={alerts}
-                  tooltipContent={this.getChartTooltipContent}
+                  data={this.getChartData(alerts)}
+                  getTooltipContent={this.getChartTooltipContent}
+                  width={800}
+                  height={250}
                 />
               )}
-              <AlertList
-                alerts={alerts}
-                selectedFilter={selectedFilter}
-                toggleGraph={this.toggleGraph}
-                graphVisible={graphVisible}
-              />
+              <AlertList alerts={alerts} selectedFilter={selectedFilter} />
             </Column>
           </PageWrapper>
         )}

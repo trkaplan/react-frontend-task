@@ -1,12 +1,122 @@
-/* eslint-disable react/prop-types */
-import React from "react"
+// Forked from https://github.com/sentisis/charts-in-react
 
-const Chart = ({ data, tooltipContent }) => (
-  <div>
-    <div>GRAPH, Work in progress</div>
-    {tooltipContent({ date: "test", tinyId: "1" })}
-    {JSON.stringify(data)}
-  </div>
-)
+import React, { Component } from "react"
+import PropTypes from "prop-types"
 
-export default Chart
+import { scaleTime, scaleLinear } from "d3-scale"
+import { line } from "d3-shape"
+import { extent } from "d3-array"
+
+import Point from "./Point"
+import Tooltip from "./Tooltip"
+import { typeMargin } from "./types"
+
+const drawLine = line()
+  .x(d => d.x)
+  .y(d => d.y)
+
+class LineChart extends Component {
+  state = {
+    data: [],
+    isTooltipVisible: false,
+    tooltipData: {}
+  }
+
+  componentWillMount() {
+    this.setData()
+  }
+
+  setData(props = this.props) {
+    const { data, width, height, margin } = props
+
+    const x = scaleTime()
+      .rangeRound([0, width - margin.left - margin.right])
+      .domain(extent(data, d => d.valueX))
+
+    const y = scaleLinear()
+      .rangeRound([height - margin.top - margin.bottom, 0])
+      .domain(extent(data, d => d.valueY))
+
+    const graphData = data.map(d => ({
+      ...d,
+      x: x(d.valueX),
+      y: y(d.valueY)
+    }))
+
+    this.setState({
+      data: graphData
+    })
+  }
+
+  handleMouseEnterPoint = d => {
+    this.setState({
+      isTooltipVisible: true,
+      tooltipData: d
+    })
+  }
+
+  handleMouseLeavePoint = () => {
+    this.setState({ isTooltipVisible: false })
+  }
+
+  render() {
+    const { width, height, margin, getTooltipContent } = this.props
+    const { data, isTooltipVisible, tooltipData } = this.state
+    return (
+      <div
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+          position: "relative"
+        }}
+      >
+        <Tooltip
+          hidden={!isTooltipVisible}
+          d={tooltipData}
+          getTooltipContent={getTooltipContent}
+        />
+
+        <svg width={width} height={height}>
+          <g transform={`translate(${margin.left}, ${margin.top})`}>
+            <path
+              fill="none"
+              stroke="steelblue"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              strokeWidth="2.5"
+              d={drawLine(data)}
+            />
+
+            {data.map((d, i) => (
+              <Point
+                // eslint-disable-next-line react/no-array-index-key
+                key={i}
+                d={d}
+                onMouseEnter={this.handleMouseEnterPoint}
+                onMouseLeave={this.handleMouseLeavePoint}
+              />
+            ))}
+          </g>
+        </svg>
+      </div>
+    )
+  }
+}
+
+LineChart.defaultProps = {
+  getTooltipContent: () => {},
+  margin: {
+    top: 20,
+    right: 20,
+    bottom: 20,
+    left: 35
+  }
+}
+LineChart.propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  margin: typeMargin,
+  getTooltipContent: PropTypes.func
+}
+
+export default LineChart

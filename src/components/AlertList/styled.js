@@ -6,6 +6,7 @@ export const PageWrapper = styled.div`
   height: 100%;
 `
 export const ToggleGraphButton = styled(Button)`
+  display: flex;
   margin-left: auto;
 `
 export const Column = styled.div`

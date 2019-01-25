@@ -3,15 +3,8 @@ import React, { Fragment } from "react"
 import { withRouter } from "react-router"
 import queryExtractor from "./alert-query-helper"
 import { Table } from "../UIKit"
-import { ToggleGraphButton } from "./styled"
 
-const AlertList = ({
-  alerts,
-  selectedFilter,
-  history,
-  toggleGraph,
-  graphVisible
-}) => {
+const AlertList = ({ alerts, selectedFilter, history }) => {
   const { query } = selectedFilter
   const { key: filterKey, value: filterValue } = query
     ? queryExtractor(query)
@@ -41,9 +34,6 @@ const AlertList = ({
   return (
     <Fragment>
       <h2>Alert List</h2>
-      <ToggleGraphButton onClick={toggleGraph}>
-        {graphVisible ? "Hide Graph" : "Show Graph"}
-      </ToggleGraphButton>
       <Table body={body} />
     </Fragment>
   )
