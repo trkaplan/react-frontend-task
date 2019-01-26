@@ -3,8 +3,12 @@ import React from "react"
 import PropTypes from "prop-types"
 import { Tr, Td } from "./styled"
 
-const Table = ({ head, body }) => (
-  <table>
+const Table = ({ head, body, width }) => (
+  <table
+    {...{
+      ...(width && { width })
+    }}
+  >
     {head && (
       <thead>
         <tr>
@@ -26,9 +30,11 @@ const Table = ({ head, body }) => (
   </table>
 )
 Table.defaultProps = {
-  head: null
+  head: null,
+  width: null
 }
 Table.propTypes = {
+  width: PropTypes.string,
   head: PropTypes.shape({
     cells: PropTypes.arrayOf(
       PropTypes.shape({

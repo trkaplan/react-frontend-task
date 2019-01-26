@@ -34,7 +34,7 @@ const AlertList = ({ alerts, selectedFilter, history }) => {
   return (
     <Fragment>
       <h2>Alert List</h2>
-      <Table body={body} />
+      <Table body={body} width="100%" />
     </Fragment>
   )
 }

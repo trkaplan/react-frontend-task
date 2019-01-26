@@ -40,6 +40,15 @@ class AlertListContainer extends Component {
       valueY: alert.count
     }))
 
+  getChartWidth = parentObj => {
+    const parentObjectStyle = getComputedStyle(parentObj)
+    return (
+      parentObj.offsetWidth -
+      (parseFloat(parentObjectStyle.paddingLeft) +
+        parseFloat(parentObjectStyle.paddingRight))
+    )
+  }
+
   getChartTooltipContent = data => {
     const { valueX: date, valueY: count } = data
     const content = `Count: ${count}, Date: ${date}`
@@ -59,7 +68,12 @@ class AlertListContainer extends Component {
                 onFilterUpdate={this.onFilterUpdate}
               />
             </Column>
-            <Column width="auto" padding="24px">
+            <Column
+              padding="24px"
+              ref={chartParent => {
+                this.chartParent = chartParent
+              }}
+            >
               <ToggleGraphButton onClick={this.toggleGraph}>
                 {graphVisible ? "Hide Graph" : "Show Graph"}
               </ToggleGraphButton>
@@ -67,7 +81,7 @@ class AlertListContainer extends Component {
                 <Chart
                   data={this.getChartData(alerts)}
                   getTooltipContent={this.getChartTooltipContent}
-                  width={800}
+                  width={this.getChartWidth(this.chartParent)}
                   height={250}
                 />
               )}
