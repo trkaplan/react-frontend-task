@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from "react"
 import { timeFormat } from "d3-time-format"
+import { withRouter } from "react-router"
+import PropTypes from "prop-types"
 import callApi from "../../utils/apiCaller"
 import AlertList from "./AlertList"
 import AlertListFilter from "../AlertListFilter"
@@ -35,11 +37,21 @@ class AlertListContainer extends Component {
     }))
   }
 
+  openAlertDetails = alertId => {
+    const { history } = this.props
+    history.push(`alert/show/${alertId}`)
+  }
+
+  onPointClickHandler = alert => {
+    this.openAlertDetails(alert.alertId)
+  }
+
   getChartData = alerts =>
     alerts.map(alert => ({
       valueX: new Date(alert.createdAtTimestamp),
       valueY: alert.count,
-      message: alert.message
+      message: alert.message,
+      alertId: alert.id
     }))
 
   getChartWidth = parentObj => {
@@ -94,6 +106,7 @@ class AlertListContainer extends Component {
                   height={250}
                   axis
                   xAxisLabelFormatter={timeFormat("%e %B")}
+                  onPointClick={this.onPointClickHandler}
                 />
               )}
               <AlertList alerts={alerts} selectedFilter={selectedFilter} />
@@ -104,5 +117,10 @@ class AlertListContainer extends Component {
     )
   }
 }
+AlertListContainer.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func
+  }).isRequired
+}
 
-export default AlertListContainer
+export default withRouter(AlertListContainer)

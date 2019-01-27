@@ -1,11 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from "react"
-import { withRouter } from "react-router"
 import queryExtractor from "./alert-query-helper"
 import { Table } from "../UIKit"
 import { TableWrapper } from "./styled"
 
-const AlertList = ({ alerts, selectedFilter, history }) => {
+const AlertList = ({ alerts, selectedFilter, openAlertDetails }) => {
   const { query } = selectedFilter
   const { key: filterKey, value: filterValue } = query
     ? queryExtractor(query)
@@ -14,15 +13,11 @@ const AlertList = ({ alerts, selectedFilter, history }) => {
     ? alerts.filter(elem => elem[filterKey] === filterValue)
     : alerts
 
-  const handleRowClick = alertId => {
-    history.push(`alert/show/${alertId}`)
-  }
-
   const tableData = {
     body: {
       rows: alertsFiltered.map(alert => ({
         key: `alert-${alert.tinyId}`,
-        onClickHandler: e => handleRowClick(alert.id, e),
+        onClickHandler: () => openAlertDetails(alert.id),
         cells: [
           { content: alert.tinyId },
           { content: alert.message },
@@ -39,4 +34,4 @@ const AlertList = ({ alerts, selectedFilter, history }) => {
   )
 }
 
-export default withRouter(AlertList)
+export default AlertList

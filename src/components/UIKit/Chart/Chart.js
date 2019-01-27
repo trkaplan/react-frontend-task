@@ -71,7 +71,8 @@ class LineChart extends Component {
       margin,
       getTooltipContent,
       axis,
-      xAxisLabelFormatter
+      xAxisLabelFormatter,
+      onPointClick
     } = this.props
     const { data, isTooltipVisible, tooltipData } = this.state
     return (
@@ -107,6 +108,7 @@ class LineChart extends Component {
                 d={d}
                 onMouseEnter={this.handleMouseEnterPoint}
                 onMouseLeave={this.handleMouseLeavePoint}
+                onClick={onPointClick}
               />
             ))}
           </g>
@@ -136,7 +138,8 @@ LineChart.defaultProps = {
     left: 35
   },
   axis: true,
-  xAxisLabelFormatter: () => {}
+  xAxisLabelFormatter: () => {},
+  onPointClick: () => {}
 }
 LineChart.propTypes = {
   width: PropTypes.number.isRequired,
@@ -144,7 +147,8 @@ LineChart.propTypes = {
   margin: typeMargin,
   getTooltipContent: PropTypes.func,
   axis: PropTypes.bool,
-  xAxisLabelFormatter: PropTypes.func
+  xAxisLabelFormatter: PropTypes.func,
+  onPointClick: PropTypes.func
 }
 
 export default LineChart
