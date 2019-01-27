@@ -1,6 +1,6 @@
 // Forked from https://github.com/sentisis/charts-in-react
 
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import PropTypes from "prop-types"
 
 import { scaleTime, scaleLinear } from "d3-scale"
@@ -8,6 +8,8 @@ import { line } from "d3-shape"
 import { extent } from "d3-array"
 
 import Point from "./Point"
+import XAxis from "./XAxis"
+import YAxis from "./YAxis"
 import Tooltip from "./Tooltip"
 import { typeMargin } from "./types"
 
@@ -60,7 +62,14 @@ class LineChart extends Component {
   }
 
   render() {
-    const { width, height, margin, getTooltipContent } = this.props
+    const {
+      width,
+      height,
+      margin,
+      getTooltipContent,
+      axis,
+      xAxisLabelFormatter
+    } = this.props
     const { data, isTooltipVisible, tooltipData } = this.state
     return (
       <div
@@ -98,6 +107,17 @@ class LineChart extends Component {
             ))}
           </g>
         </svg>
+        {axis && (
+          <Fragment>
+            <XAxis
+              data={data}
+              width={width}
+              margin={margin}
+              labelFormatter={xAxisLabelFormatter}
+            />
+            <YAxis data={data} height={height} margin={margin} />
+          </Fragment>
+        )}
       </div>
     )
   }
@@ -110,13 +130,17 @@ LineChart.defaultProps = {
     right: 20,
     bottom: 20,
     left: 35
-  }
+  },
+  axis: true,
+  xAxisLabelFormatter: () => {}
 }
 LineChart.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   margin: typeMargin,
-  getTooltipContent: PropTypes.func
+  getTooltipContent: PropTypes.func,
+  axis: PropTypes.bool,
+  xAxisLabelFormatter: PropTypes.func
 }
 
 export default LineChart

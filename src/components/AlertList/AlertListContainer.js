@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react"
+import { timeFormat } from "d3-time-format"
 import callApi from "../../utils/apiCaller"
 import AlertList from "./AlertList"
 import AlertListFilter from "../AlertListFilter"
@@ -77,12 +78,15 @@ class AlertListContainer extends Component {
               <ToggleGraphButton onClick={this.toggleGraph}>
                 {graphVisible ? "Hide Graph" : "Show Graph"}
               </ToggleGraphButton>
+              <h2>Alert List</h2>
               {graphVisible && (
                 <Chart
                   data={this.getChartData(alerts)}
                   getTooltipContent={this.getChartTooltipContent}
                   width={this.getChartWidth(this.chartParent)}
                   height={250}
+                  axis
+                  xAxisLabelFormatter={timeFormat("%e %B")}
                 />
               )}
               <AlertList alerts={alerts} selectedFilter={selectedFilter} />

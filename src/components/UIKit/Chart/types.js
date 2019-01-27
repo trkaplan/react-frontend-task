@@ -7,3 +7,10 @@ export const typeMargin = PropTypes.shape({
   bottom: PropTypes.number.isRequired,
   left: PropTypes.number.isRequired
 })
+
+export const typeData = PropTypes.arrayOf(
+  PropTypes.shape({
+    valueX: PropTypes.oneOfType([PropTypes.number, PropTypes.instanceOf(Date)]),
+    valueY: PropTypes.oneOfType([PropTypes.number, PropTypes.instanceOf(Date)])
+  })
+)

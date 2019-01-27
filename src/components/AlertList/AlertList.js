@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-import React, { Fragment } from "react"
+import React from "react"
 import { withRouter } from "react-router"
 import queryExtractor from "./alert-query-helper"
 import { Table } from "../UIKit"
+import { TableWrapper } from "./styled"
 
 const AlertList = ({ alerts, selectedFilter, history }) => {
   const { query } = selectedFilter
@@ -32,10 +33,9 @@ const AlertList = ({ alerts, selectedFilter, history }) => {
   }
   const { body } = tableData
   return (
-    <Fragment>
-      <h2>Alert List</h2>
+    <TableWrapper>
       <Table body={body} width="100%" />
-    </Fragment>
+    </TableWrapper>
   )
 }
 

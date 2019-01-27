@@ -1,6 +1,10 @@
 import styled from "styled-components"
 import { Button } from "../UIKit"
 
+export const TableWrapper = styled.div`
+  margin-top: 24px;
+`
+
 export const PageWrapper = styled.div`
   display: flex;
   height: 100%;
