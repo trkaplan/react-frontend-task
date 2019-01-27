@@ -38,7 +38,8 @@ class AlertListContainer extends Component {
   getChartData = alerts =>
     alerts.map(alert => ({
       valueX: new Date(alert.createdAtTimestamp),
-      valueY: alert.count
+      valueY: alert.count,
+      message: alert.message
     }))
 
   getChartWidth = parentObj => {
@@ -51,9 +52,15 @@ class AlertListContainer extends Component {
   }
 
   getChartTooltipContent = data => {
-    const { valueX: date, valueY: count } = data
-    const content = `Count: ${count}, Date: ${date}`
-    return <Fragment>{content}</Fragment>
+    const { valueX: date, valueY: count, message } = data
+    return (
+      <Fragment>
+        <b>Message:</b> {message} <br />
+        <br />
+        <b>Count:</b> {count} <br />
+        <b>Date:</b> {date.toGMTString()}
+      </Fragment>
+    )
   }
 
   render() {

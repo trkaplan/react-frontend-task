@@ -6,13 +6,16 @@ import PropTypes from "prop-types"
 import { scaleTime, scaleLinear } from "d3-scale"
 import { line } from "d3-shape"
 import { extent } from "d3-array"
-
+import styled from "styled-components"
 import Point from "./Point"
 import XAxis from "./XAxis"
 import YAxis from "./YAxis"
 import Tooltip from "./Tooltip"
 import { typeMargin } from "./types"
 
+const TooltipWrapper = styled.div`
+  position: relative;
+`
 const drawLine = line()
   .x(d => d.x)
   .y(d => d.y)
@@ -79,12 +82,13 @@ class LineChart extends Component {
           position: "relative"
         }}
       >
-        <Tooltip
-          hidden={!isTooltipVisible}
-          d={tooltipData}
-          getTooltipContent={getTooltipContent}
-        />
-
+        <TooltipWrapper>
+          <Tooltip
+            hidden={!isTooltipVisible}
+            d={tooltipData}
+            getTooltipContent={getTooltipContent}
+          />
+        </TooltipWrapper>
         <svg width={width} height={height}>
           <g transform={`translate(${margin.left}, ${margin.top})`}>
             <path

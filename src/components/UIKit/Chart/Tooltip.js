@@ -6,8 +6,9 @@ const Tooltip = ({ hidden, d, getTooltipContent }) =>
     <div
       style={{
         opacity: 0.9,
-        transform: `translate(${d.x}px, ${d.y - 45}px)`,
+        transform: `translate(${d.x}px, ${d.y}px)`,
         position: "absolute",
+        bottom: 0,
         padding: "12px",
         border: "1px solid #c5c5c5",
         backgroundColor: "#fbfbfb",
