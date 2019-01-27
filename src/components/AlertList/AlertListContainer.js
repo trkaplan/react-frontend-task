@@ -109,7 +109,11 @@ class AlertListContainer extends Component {
                   onPointClick={this.onPointClickHandler}
                 />
               )}
-              <AlertList alerts={alerts} selectedFilter={selectedFilter} />
+              <AlertList
+                alerts={alerts}
+                selectedFilter={selectedFilter}
+                openAlertDetails={this.openAlertDetails}
+              />
             </Column>
           </PageWrapper>
         )}
