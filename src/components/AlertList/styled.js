@@ -14,9 +14,9 @@ export const ToggleGraphButton = styled(Button)`
   margin-left: auto;
 `
 export const Column = styled.div`
-  flex: ${props => `0 0 ${props.width};`};
-  max-width: ${props => `${props.width};`};
-  ${props => `padding:${props.padding};`};
+  ${({ width }) => width && `flex: 0 0 ${width};`};
+  ${({ width }) => width && `max-width:${width};`};
+  ${({ padding }) => padding && `padding:${padding};`};
 `
 
 export const toggleGraphButton = styled.button`
